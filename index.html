@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 Goals Bingo</title>
+    <title>Dynamics Champions Bingo</title>
     <style>
         * {
             margin: 0;
@@ -13,14 +13,24 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
         }
 
         .header {
@@ -30,22 +40,36 @@
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .player-section {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
         .player-input {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
@@ -54,30 +78,49 @@
         .player-input label {
             font-weight: 600;
             color: #333;
+            font-size: 1.1rem;
         }
 
         .player-input input {
-            padding: 12px 20px;
+            padding: 14px 22px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
-            width: 250px;
-            transition: border-color 0.3s;
+            width: 260px;
+            transition: all 0.3s;
         }
 
         .player-input input:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
@@ -86,17 +129,18 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
 
         .btn-secondary {
-            background: #f0f0f0;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
             color: #333;
         }
 
         .btn-secondary:hover {
-            background: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
 
         .btn-success {
@@ -104,110 +148,158 @@
             color: white;
         }
 
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(56, 239, 125, 0.4);
+        }
+
         .player-name-display {
             text-align: center;
             font-size: 1.2rem;
             color: #333;
-            margin-top: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
 
         .player-name-display span {
             font-weight: 700;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .bingo-board {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            background: white;
+            gap: 10px;
+            background: rgba(255,255,255,0.95);
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
         .bingo-cell {
             aspect-ratio: 1;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .bingo-cell:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .bingo-cell:active {
+            transform: scale(0.95);
         }
 
         .cell-header {
-            padding: 8px 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: white;
-            line-height: 1.2;
+            padding: 10px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.3;
+            text-align: center;
+            min-height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
         }
 
         .cell-content {
             flex: 1;
-            background: white;
+            background: rgba(255,255,255,0.9);
             margin: 0 4px 4px 4px;
-            border-radius: 0 0 6px 6px;
+            border-radius: 0 0 8px 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 5px;
         }
 
+        .bingo-cell.marked {
+            animation: markPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes markPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
         .bingo-cell.marked .cell-content {
-            background: rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.5);
         }
 
         .bingo-cell.marked::after {
-            content: '✓';
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: rgba(0,0,0,0.3);
-            font-weight: bold;
+            width: 60px;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/contain no-repeat;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            animation: checkAppear 0.3s ease-out;
         }
 
-        /* Color classes */
-        .color-yellow { background-color: #ffd54f; }
-        .color-red { background-color: #ef5350; }
-        .color-red .cell-header { color: white; }
-        .color-blue { background-color: #64b5f6; }
-        .color-green { background-color: #81c784; }
-        .color-purple { background-color: #ba68c8; }
-        .color-orange { background-color: #ffb74d; }
-        .color-pink { background-color: #f48fb1; }
-        .color-teal { background-color: #4db6ac; }
+        @keyframes checkAppear {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        }
+
+        /* Enhanced color classes with gradients */
+        .color-yellow { background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%); }
+        .color-red { background: linear-gradient(135deg, #ef5350 0%, #d32f2f 100%); }
+        .color-red .cell-header { color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .color-blue { background: linear-gradient(135deg, #64b5f6 0%, #1976d2 100%); }
+        .color-green { background: linear-gradient(135deg, #81c784 0%, #388e3c 100%); }
+        .color-purple { background: linear-gradient(135deg, #ba68c8 0%, #7b1fa2 100%); }
+        .color-orange { background: linear-gradient(135deg, #ffb74d 0%, #f57c00 100%); }
+        .color-pink { background: linear-gradient(135deg, #f48fb1 0%, #c2185b 100%); }
+        .color-teal { background: linear-gradient(135deg, #4db6ac 0%, #00796b 100%); }
 
         .free-square {
-            background: #64b5f6 !important;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%) !important;
+            animation: freeSquareGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes freeSquareGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
         }
 
         .free-square .cell-header {
-            background: #64b5f6;
+            color: #333;
+            font-size: 0.8rem;
         }
 
         .free-square .cell-content {
-            background: #90caf9;
-            font-weight: 600;
-            color: #1565c0;
+            background: rgba(255,255,255,0.8);
+            font-weight: 700;
+            color: #f57c00;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
@@ -215,22 +307,59 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px 60px;
-            border-radius: 20px;
-            font-size: 3rem;
-            font-weight: bold;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            padding: 50px 70px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
             z-index: 1000;
-            animation: pulse 0.5s ease-in-out infinite alternate;
-            display: none;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        @keyframes pulse {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(-50%, -50%) scale(1.1); }
+        .bingo-alert.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .bingo-alert h2 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            animation: bingoText 0.5s ease-in-out infinite alternate;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        @keyframes bingoText {
+            from { transform: scale(1); text-shadow: 3px 3px 6px rgba(0,0,0,0.3); }
+            to { transform: scale(1.08); text-shadow: 5px 5px 20px rgba(255,255,255,0.5); }
+        }
+
+        .bingo-alert p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .bingo-alert .bingo-count {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 25px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .bingo-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .bingo-buttons .btn {
+            padding: 18px 35px;
+            font-size: 1.15rem;
         }
 
         .overlay {
@@ -239,65 +368,174 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
             z-index: 999;
-            display: none;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .progress-section {
-            background: white;
-            border-radius: 15px;
-            padding: 15px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px 25px;
             margin-top: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
         .progress-bar {
-            height: 20px;
-            background: #e0e0e0;
-            border-radius: 10px;
+            height: 25px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 15px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 12px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            transition: width 0.5s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 100%;
+            border-radius: 15px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: progressShimmer 2s linear infinite;
+            position: relative;
+        }
+
+        @keyframes progressShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .progress-text {
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
+            font-size: 1.1rem;
+        }
+
+        .progress-text span {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Confetti container */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Sparkle effect for marked cells */
+        .sparkle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sparkle::before,
+        .sparkle::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        .sparkle::before {
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .sparkle::after {
+            bottom: 20%;
+            right: 20%;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
         }
 
         @media (max-width: 600px) {
             .bingo-board {
-                gap: 4px;
-                padding: 10px;
+                gap: 6px;
+                padding: 12px;
             }
 
             .cell-header {
-                font-size: 0.6rem;
-                padding: 5px;
+                font-size: 0.55rem;
+                padding: 6px 4px;
             }
 
             .bingo-cell.marked::after {
-                font-size: 2rem;
+                width: 35px;
+                height: 35px;
             }
 
             .header h1 {
                 font-size: 1.8rem;
             }
+
+            .bingo-alert {
+                padding: 30px 40px;
+            }
+
+            .bingo-alert h2 {
+                font-size: 2.2rem;
+            }
+
+            .bingo-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="confetti-container" id="confettiContainer"></div>
+
     <div class="container">
         <div class="header">
-            <h1>🎯 2025 Goals Bingo</h1>
+            <h1>Dynamics Champions Bingo</h1>
             <p>Click squares as you complete each goal!</p>
         </div>
 
@@ -330,7 +568,15 @@
     </div>
 
     <div class="overlay" id="overlay" onclick="closeBingo()"></div>
-    <div class="bingo-alert" id="bingoAlert">🎉 BINGO! 🎉</div>
+    <div class="bingo-alert" id="bingoAlert">
+        <h2>BINGO!</h2>
+        <p>Congratulations! You completed a line!</p>
+        <div class="bingo-count">Total Bingos: <span id="bingoCount">1</span></div>
+        <div class="bingo-buttons">
+            <button class="btn btn-success" onclick="shareBingo()">Share Achievement</button>
+            <button class="btn btn-secondary" onclick="closeBingo()">Keep Playing</button>
+        </div>
+    </div>
 
     <script>
         const bingoItems = [
@@ -363,6 +609,7 @@
 
         let playerName = '';
         let markedCells = new Set();
+        let completedBingos = new Set();
 
         function init() {
             loadState();
@@ -376,6 +623,7 @@
             if (playerName) {
                 document.getElementById('currentPlayer').textContent = playerName;
                 document.getElementById('playerDisplay').style.display = 'block';
+                renderBoard();
                 saveState();
             }
         }
@@ -387,12 +635,12 @@
             bingoItems.forEach((item, index) => {
                 const cell = document.createElement('div');
                 cell.className = `bingo-cell color-${item.color}${markedCells.has(index) ? ' marked' : ''}${item.isFree ? ' free-square' : ''}`;
-                cell.onclick = () => toggleCell(index);
+                cell.onclick = () => toggleCell(index, cell);
 
                 if (item.isFree) {
                     cell.innerHTML = `
                         <div class="cell-header">FREE SQUARE</div>
-                        <div class="cell-content">${playerName || 'Your Name'}<br>FREE SQUARE</div>
+                        <div class="cell-content">${playerName || 'Your Name'}</div>
                     `;
                 } else {
                     cell.innerHTML = `
@@ -401,24 +649,72 @@
                     `;
                 }
 
+                if (markedCells.has(index)) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    cell.appendChild(sparkle);
+                }
+
                 board.appendChild(cell);
             });
         }
 
-        function toggleCell(index) {
+        function toggleCell(index, cellElement) {
             if (bingoItems[index].isFree) {
-                // Free square is always marked
                 markedCells.add(index);
             } else if (markedCells.has(index)) {
                 markedCells.delete(index);
             } else {
                 markedCells.add(index);
+                // Trigger celebration particles
+                createCellParticles(cellElement);
             }
 
             renderBoard();
             updateProgress();
             checkBingo();
             saveState();
+        }
+
+        function createCellParticles(cell) {
+            const rect = cell.getBoundingClientRect();
+            const colors = ['#ffd54f', '#ef5350', '#64b5f6', '#81c784', '#ba68c8', '#ffb74d', '#f48fb1', '#4db6ac'];
+
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 8px;
+                    height: 8px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1000;
+                    left: ${rect.left + rect.width / 2}px;
+                    top: ${rect.top + rect.height / 2}px;
+                `;
+                document.body.appendChild(particle);
+
+                const angle = (Math.PI * 2 * i) / 8;
+                const velocity = 100 + Math.random() * 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                let x = 0, y = 0, opacity = 1;
+                const animate = () => {
+                    x += vx * 0.02;
+                    y += vy * 0.02 + 2;
+                    opacity -= 0.02;
+                    particle.style.transform = `translate(${x}px, ${y}px)`;
+                    particle.style.opacity = opacity;
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        particle.remove();
+                    }
+                };
+                requestAnimationFrame(animate);
+            }
         }
 
         function updateProgress() {
@@ -429,25 +725,25 @@
 
         function checkBingo() {
             const lines = [
-                // Rows
                 [0, 1, 2, 3, 4],
                 [5, 6, 7, 8, 9],
                 [10, 11, 12, 13, 14],
                 [15, 16, 17, 18, 19],
                 [20, 21, 22, 23, 24],
-                // Columns
                 [0, 5, 10, 15, 20],
                 [1, 6, 11, 16, 21],
                 [2, 7, 12, 17, 22],
                 [3, 8, 13, 18, 23],
                 [4, 9, 14, 19, 24],
-                // Diagonals
                 [0, 6, 12, 18, 24],
                 [4, 8, 12, 16, 20]
             ];
 
-            for (const line of lines) {
-                if (line.every(index => markedCells.has(index))) {
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (line.every(index => markedCells.has(index)) && !completedBingos.has(i)) {
+                    completedBingos.add(i);
+                    saveState();
                     showBingo();
                     return;
                 }
@@ -455,19 +751,50 @@
         }
 
         function showBingo() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('bingoAlert').style.display = 'block';
+            document.getElementById('bingoCount').textContent = completedBingos.size;
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('bingoAlert').classList.add('show');
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ffd54f', '#ef5350', '#64b5f6', '#81c784', '#ba68c8', '#ffb74d', '#f48fb1', '#4db6ac', '#ff6b6b', '#4ecdc4', '#ffe66d'];
+
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.cssText = `
+                        left: ${Math.random() * 100}%;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        width: ${5 + Math.random() * 10}px;
+                        height: ${5 + Math.random() * 10}px;
+                        border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                        animation: confettiFall ${2 + Math.random() * 3}s linear forwards;
+                        animation-delay: ${Math.random() * 0.5}s;
+                    `;
+                    container.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 5500);
+                }, i * 20);
+            }
+        }
+
+        function shareBingo() {
+            closeBingo();
+            shareProgress();
         }
 
         function closeBingo() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('bingoAlert').style.display = 'none';
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('bingoAlert').classList.remove('show');
         }
 
         function resetBoard() {
             if (confirm('Are you sure you want to reset your progress?')) {
                 markedCells = new Set();
-                // Auto-mark free square
+                completedBingos = new Set();
                 markedCells.add(12);
                 renderBoard();
                 updateProgress();
@@ -476,25 +803,118 @@
         }
 
         function shareProgress() {
-            const count = markedCells.size;
-            const text = `🎯 ${playerName || 'I'} completed ${count}/25 goals on the 2025 Goals Bingo! ${count === 25 ? '🏆 BLACKOUT!' : ''}`;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const cellSize = 120;
+            const padding = 20;
+            const headerHeight = 80;
+            const footerHeight = 60;
+            const boardSize = cellSize * 5;
 
-            if (navigator.share) {
-                navigator.share({
-                    title: '2025 Goals Bingo',
-                    text: text
-                });
-            } else {
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('Progress copied to clipboard!');
-                });
+            canvas.width = boardSize + padding * 2;
+            canvas.height = boardSize + padding * 2 + headerHeight + footerHeight;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(0.5, '#764ba2');
+            gradient.addColorStop(1, '#f093fb');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Header
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 28px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Dynamics Champions Bingo', canvas.width / 2, 45);
+
+            if (playerName) {
+                ctx.font = '16px Segoe UI, sans-serif';
+                ctx.fillText(`Player: ${playerName}`, canvas.width / 2, 70);
             }
+
+            const colorMap = {
+                yellow: ['#ffd54f', '#ffb300'],
+                red: ['#ef5350', '#d32f2f'],
+                blue: ['#64b5f6', '#1976d2'],
+                green: ['#81c784', '#388e3c'],
+                purple: ['#ba68c8', '#7b1fa2'],
+                orange: ['#ffb74d', '#f57c00'],
+                pink: ['#f48fb1', '#c2185b'],
+                teal: ['#4db6ac', '#00796b']
+            };
+
+            bingoItems.forEach((item, index) => {
+                const row = Math.floor(index / 5);
+                const col = index % 5;
+                const x = padding + col * cellSize;
+                const y = headerHeight + padding + row * cellSize;
+                const isMarked = markedCells.has(index);
+
+                // Cell gradient background
+                const colors = colorMap[item.color] || ['#ccc', '#999'];
+                const cellGradient = ctx.createLinearGradient(x, y, x + cellSize, y + cellSize);
+                cellGradient.addColorStop(0, colors[0]);
+                cellGradient.addColorStop(1, colors[1]);
+                ctx.fillStyle = cellGradient;
+                ctx.beginPath();
+                ctx.roundRect(x + 2, y + 2, cellSize - 4, cellSize - 4, 8);
+                ctx.fill();
+
+                // Inner white area
+                ctx.fillStyle = isMarked ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.9)';
+                ctx.beginPath();
+                ctx.roundRect(x + 6, y + 28, cellSize - 12, cellSize - 34, 4);
+                ctx.fill();
+
+                // Draw header text
+                ctx.fillStyle = item.color === 'red' ? 'white' : '#333';
+                ctx.font = 'bold 10px Segoe UI, sans-serif';
+                const headerText = item.text.length > 20 ? item.text.substring(0, 18) + '...' : item.text;
+                ctx.fillText(headerText, x + cellSize / 2, y + 18, cellSize - 10);
+
+                // Draw checkmark if marked
+                if (isMarked) {
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 45px sans-serif';
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 4;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 2;
+                    ctx.fillText('✓', x + cellSize / 2, y + cellSize / 2 + 18);
+                    ctx.shadowColor = 'transparent';
+                }
+            });
+
+            // Footer with progress and bingo count
+            const count = markedCells.size;
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 18px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            let progressText = `${count}/25 goals`;
+            if (completedBingos.size > 0) {
+                progressText += ` | ${completedBingos.size} BINGO${completedBingos.size > 1 ? 'S' : ''}!`;
+            }
+            if (count === 25) {
+                progressText = 'BLACKOUT! All 25 goals completed!';
+            }
+            ctx.fillText(progressText, canvas.width / 2, canvas.height - 25);
+
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bingo-progress-${playerName || 'board'}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/png');
         }
 
         function saveState() {
             const state = {
                 playerName,
-                markedCells: Array.from(markedCells)
+                markedCells: Array.from(markedCells),
+                completedBingos: Array.from(completedBingos)
             };
             localStorage.setItem('bingoState', JSON.stringify(state));
         }
@@ -505,6 +925,7 @@
                 const state = JSON.parse(saved);
                 playerName = state.playerName || '';
                 markedCells = new Set(state.markedCells || []);
+                completedBingos = new Set(state.completedBingos || []);
 
                 if (playerName) {
                     document.getElementById('playerName').value = playerName;
@@ -512,12 +933,10 @@
                     document.getElementById('playerDisplay').style.display = 'block';
                 }
             } else {
-                // Auto-mark free square for new users
                 markedCells.add(12);
             }
         }
 
-        // Initialize on load
         init();
     </script>
 </body>
